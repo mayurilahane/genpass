@@ -24,6 +24,7 @@ import diceware  # Used for creating password
 from genpass.database import DatabaseConnection
 from datetime import date
 from beautifultable import BeautifulTable  # display output in table format
+import requests
 
 
 db_obj = DatabaseConnection()
@@ -81,14 +82,18 @@ def savepass():
     creation_date = date.today()
     email = click.prompt("Enter email id", default="None")
     portal_url = click.prompt("Enter portal url", default="None")
-    db_obj.insert_data(
-        portal_name=portal_name,
-        password=pwd,
-        creation_date=creation_date,
-        email=email,
-        portal_url=portal_url,
-    )
+    request = requests.get(portal_url)
 
+    if request.status_code != 200:
+        print('Web site does not reachable')
+
+    db_obj.insert_data(
+    portal_name=portal_name,
+    password=pwd,
+    creation_date=creation_date,
+    email=email,
+    portal_url=portal_url,
+    )
 
 @click.command(help="Create new password")
 def createpass():
@@ -98,14 +103,18 @@ def createpass():
     creation_date = date.today()
     email = click.prompt("Enter email id", default="None")
     portal_url = click.prompt("Enter portal url", default="None")
-    db_obj.insert_data(
-        portal_name=portal_name,
-        password=password,
-        creation_date=creation_date,
-        email=email,
-        portal_url=portal_url,
-    )
+    request = requests.get(portal_url)
 
+    if request.status_code != 200:
+        print('Web site does not reachable')
+
+    db_obj.insert_data(
+    portal_name=portal_name,
+    password=password,
+    creation_date=creation_date,
+    email=email,
+    portal_url=portal_url,
+    )
 
 @click.command(help="Show password")
 def showpass():
